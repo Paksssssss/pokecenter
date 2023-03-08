@@ -1,0 +1,30 @@
+.pokecard {
+  border: 1px solid black;
+  border-radius: 15px;
+  width: 23%;
+  margin: 15px 5px;
+  display: flex;
+  flex-direction: column;
+}
+
+.pokename {
+  margin: 10px 15px;
+  text-transform: capitalize;
+}
+
+.pokecontent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 5px 15px 15px;
+}
+
+.pokecontent > span {
+  margin-top: 10px;
+}
+
+.pokeimage {    
+  display: flex;
+  justify-content: center;
+  background: lightgrey;
+}
