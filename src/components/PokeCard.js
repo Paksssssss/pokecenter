@@ -13,7 +13,6 @@ const PokeCard = ({ pokemon }) => {
     `pokemon-${pokemon.name}`,
     getPokemon
   );
-  console.log(data);
   const pokeImage = useMemo(() => {
     if (data && data.sprites && data.sprites.other.home.front_default) {
       return (

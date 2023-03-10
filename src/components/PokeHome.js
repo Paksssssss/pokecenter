@@ -3,19 +3,36 @@ import { useQuery } from "react-query";
 import { BeatLoader } from "react-spinners";
 import PokeCard from "./PokeCard";
 import "./PokeHome.css";
+import { useEffect, useRef } from "react";
+import {
+  addPokemons,
+  getPokemons,
+  loadingPokemonsStart,
+} from "../store/pokemonSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const PokeHome = () => {
-  const getPokemons = async () => {
-    const res = await fetch("https://pokeapi.co/api/v2/pokemon?limit=30");
-    return res.json();
-  };
-  const { data, isLoading, isError } = useQuery("pokemons", getPokemons);
+  const { pokemonsList, loadingPokemons, errorLoadingPokemons } = useSelector(
+    (state) => state.pokemons
+  );
+  const dispatch = useDispatch();
+  const dataFetch = useRef(false);
 
+  useEffect(() => {
+    if (dataFetch.current) {
+      return;
+    }
+    dispatch(loadingPokemonsStart());
+    getPokemons().then((value) => {
+      dispatch(addPokemons(value.results));
+    });
+    dataFetch.current = true;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <div>
       <h2 className="poketitle">These are the pokemons in your bag</h2>
-
-      {isLoading ? (
+      {loadingPokemons ? (
         <div className="loading-wrapper">
           <BeatLoader
             color={"#ee1515"}
@@ -27,11 +44,9 @@ const PokeHome = () => {
         </div>
       ) : (
         <div className="poke-holder">
-          {data.results
-            ? data.results.map((poke) => <PokeCard pokemon={poke} />)
+          {pokemonsList && pokemonsList.length > 0
+            ? pokemonsList.map((poke) => <PokeCard pokemon={poke} />)
             : "No Pokemons Found"}
-          <span>Height: {data.height}dm</span>
-          <span>Weight: {data.height}hg</span>
         </div>
       )}
     </div>
